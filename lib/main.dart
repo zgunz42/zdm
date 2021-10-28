@@ -1,17 +1,19 @@
 import 'dart:async';
 
-import 'package:boilerplate/ui/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zdm/app/app.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
-import 'di/components/service_locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setPreferredOrientations();
-  await setupLocator();
+  await FlutterDownloader.initialize(
+    debug: true // optional: set false to disable printing logs to console
+  );
   return runZonedGuarded(() async {
-    runApp(MyApp());
+    runApp(ZDMApp());
   }, (error, stack) {
     print(stack);
     print(error);

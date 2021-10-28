@@ -1,5 +1,5 @@
-name: boilerplate
-description: A flutter boilerplate project created using MobX and Provider.
+name: zdm
+description: A flutter project help create direct download link.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -8,6 +8,7 @@ description: A flutter boilerplate project created using MobX and Provider.
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -18,111 +19,124 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
-  flutter_cupertino_localizations: ^1.0.1
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.3
-
-  # The following adds the shared pref as a dependency in your application
+  #!! CORE ===================
+  get: ^4.3.8
+  sizer: ^2.0.15
   shared_preferences: ^2.0.6
-
-  # A composable, Future-based library for making HTTP requests.
-  http: ^0.13.3
-
-  # Flogs, a powerful logging framework
-#  f_logs: ^1.2.2
-
-  # MobX is a library for reactively managing the state of your applications. Use the power of
-  # observables, actions, and reactions to supercharge your Dart and Flutter apps.
-  mobx: ^2.0.1
-  flutter_mobx: ^2.0.0
-
-  # An helper to easily exposes a value using InheritedWidget without having to write one.
-  provider: ^5.0.0
-
-  # String validation and sanitization for Dart. Dart 2-compatible version of validator
-  validators: ^3.0.0
-
-  # A powerful Http client for Dart
-  dio: ^4.0.0
-
-  # A flexible widget for user notification. Customize your text, button, duration, animations
-  # and much more. For Android devs, it is made to replace Snackbars and Toasts.
+  path_provider: ^2.0.5
+  device_preview: ^0.7.4
+  flutter_keyboard_aware_dialog: ^1.0.1
+  google_fonts: ^2.1.0
+  #!! UI ===================
+  # ======= icons ==========
+  unicons: ^2.0.2
+  cupertino_icons: ^1.0.3
+  # ======= Widget ==========
   another_flushbar: ^1.10.23
-
-  # Material Dialog
   material_dialog: ^1.0.0-nullsafety.1
-
-  # This package provides internationalization and localization facilities, including message
-  # translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: ^0.17.0
-
-  # XXTEA is a fast and secure encryption algorithm. This is a XXTEA library for Dart.
+  #!! UTILS ===================
+  optimized_cached_image: ^3.0.0
+  connectivity: ^3.0.6
+  loading_skeleton: 1.0.2
+  expressions: ^0.2.3
+  validators: ^3.0.0
   xxtea: ^2.1.0
-
-  # An helper to easily exposes a value using InheritedWidget without having to write one.
-  sembast: ^3.1.0+2
-  path_provider: ^2.0.2
-
-  # for dependency injection
-  get_it: ^7.1.3
+  uuid: ^3.0.3
+  #!! SERVICES ===================
+  dio: ^4.0.0
+  sembast: ^3.1.0+2  ## local nosql DB
+  pretty_dio_logger: ^1.1.1
+  qr_code_scanner: ^0.5.2
+  flutter_downloader: ^1.7.1
+  timeago: ^3.1.0
+  flutter_svg: ^0.23.0+1
+  permission_handler: ^8.2.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The following adds the launcher icon support to your application.
-  # run below mentioned commands to generate launcher icons
-  # flutter packages get
-  # flutter packages pub run flutter_launcher_icons:main
-  flutter_launcher_icons: ^0.9.0
-  mobx_codegen: ^2.0.1+3
-  build_runner: ^1.12.2
-  analyzer: ^1.4.0
-
-flutter_icons:
-  image_path: "assets/icons/ic_launcher.png"
-  android: true
-  ios: true
-
-
-# For information on the generic Dart art of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
+  analyzer: ^2.7.0
+  mockito: ^5.0.16
+  flutter_launcher_icons: ^0.9.2
+  flutter_native_splash: ^1.2.4
+  flutter_rename_app: ^1.0.0
+  flutter_gen: ^4.0.1
+dependency_overrides:
+  yaml: ^3.1.0
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/images/
-  - assets/icons/
-  - assets/lang/
+    - assets/images/icons/
+    - assets/images/app_images/
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.io/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
   fonts:
-  - family: ProductSans
-    fonts:
-    - asset: assets/fonts/Product-Sans-Regular.ttf
-    - asset: assets/fonts/Product-Sans-Italic.ttf
-      style: italic
-    - asset: assets/fonts/Product-Sans-Bold.ttf
-      weight: 700
+      - family: Inter
+        fonts:
+          - asset: assets/fonts/Inter-Thin.ttf
+            weight: 100
+          - asset: assets/fonts/Inter-Light.ttf
+            weight: 300
+          - asset: assets/fonts/Inter-Regular.ttf
+          - asset: assets/fonts/Inter-Medium.ttf
+            weight: 500
+          - asset: assets/fonts/Inter-Bold.ttf
+            weight: 700
+          - asset: assets/fonts/Inter-Black.ttf
+            weight: 900
 
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.io/custom-fonts/#from-packages
+
+
+#=======================================================================
+# SET UP ASSETS-GENERATOR, ICON, SPLASH SCREEN AND APP INFO ============
+#=======================================================================
+
+# ========================================================================
+# exec command ' flutter pub run flutter_native_splash:create ' in your the terminal
+flutter_native_splash:
+  image: assets/images/app_images/splash_logo.png
+  color: "#edd984"
+  android_gravity: center
+  ios_content_mode: center
+  ios: true
+  android_disable_fullscreen: false
+
+# ========================================================================
+# exec command ' flutter pub run flutter_launcher_icons:main ' in your the terminal
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/images/app_images/launcher_icon.png
+
+# ========================================================================
+# exec command ' flutter pub run flutter_rename_app ' in your the terminal
+
+flutter_rename_app:
+  application_name: ZDM Downloader
+  dart_package_name: zdm
+  application_id: com.satulayar.zdm
+  # IOS APP ID
+  bundle_id: com.satulayar.zdm
+  # ANDROID APP ID
+  android_package_name: com.satulayar.zdm
+
+# ========================================================================
+  # how to install asset generator exec -> dart pub activate flutter_gen
+  # exec command ' fluttergen -c pubspec.yaml ' in your the terminal
+
+flutter_gen:
+  output: lib/config/constants/ # Optional (default: lib/gen/)
+  lineLength: 80 # Optional (default: 80)
+  # Optional
+  integrations:
+    flutter_svg: true
+    flare_flutter: false
+  colors:
+    inputs:
+      - assets/color/colors.xml
+  #========================================
