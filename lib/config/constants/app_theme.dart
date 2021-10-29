@@ -29,19 +29,19 @@ final ThemeData themeData = new ThemeData(
     fontFamily: FontFamily.inter,
     brightness: Brightness.light,
     primarySwatch: ColorName.crimsonRed,
-    primaryColor: ColorName.crimsonRed[500],
+    primaryColor: ColorName.crimsonRed,
     primaryColorBrightness: Brightness.light,
     colorScheme: ColorScheme.light(
-      secondary: ColorName.crimsonRed[500] ?? Color(0xff03dac6),
+      secondary: ColorName.crimsonRed,
     ),
 );
 
 final ThemeData themeDataDark = ThemeData(
   fontFamily: FontFamily.inter,
   brightness: Brightness.dark,
-  primaryColor: ColorName.crimsonRed[500],
+  primaryColor: ColorName.crimsonRed,
   primaryColorBrightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    secondary: ColorName.crimsonRed[500] ?? Color(0xff03dac6),
+    secondary: ColorName.crimsonRed,
   ),
 );

@@ -48,10 +48,12 @@ dependencies:
   sembast: ^3.1.0+2  ## local nosql DB
   pretty_dio_logger: ^1.1.1
   qr_code_scanner: ^0.5.2
-  flutter_downloader: ^1.7.1
+  flutter_downloader: 1.5.1
   timeago: ^3.1.0
   flutter_svg: ^0.23.0+1
   permission_handler: ^8.2.5
+  device_info: ^2.0.2
+  android_path_provider: ^0.3.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +76,7 @@ flutter:
   assets:
     - assets/images/icons/
     - assets/images/app_images/
+    - assets/images/empty_state/
 
   fonts:
       - family: Inter

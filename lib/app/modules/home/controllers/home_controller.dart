@@ -7,9 +7,8 @@ class HomeController extends GetxController {
   final link = "".obs;
   final TextEditingController inputController = TextEditingController();
   final RootController rootController;
-  final DownloaderService downloader;
 
-  HomeController({required this.rootController, required this.downloader});
+  HomeController({required this.rootController});
   
   @override
   void onInit() {

@@ -6,13 +6,14 @@ class TaskCard extends StatelessWidget {
   final String title;
   final DateTime beginDate;
   final double progress;
-  final String fileSize;
+  final String fileSize, transferRate;
   final SvgGenImage image;
 
   const TaskCard({Key? key, 
   required this.title, 
   required this.beginDate, required this.progress, 
   required this.image,
+  required this.transferRate,
   required this.fileSize}) : super(key: key);
 
   @override
@@ -23,10 +24,7 @@ class TaskCard extends StatelessWidget {
       child: Row(
         children: [
           Container(width: 50, height: 50, 
-            child: FittedBox(
-              alignment: Alignment.center,
-              child: image.svg(),
-            ),
+          child: FittedBox(child: image.svg()),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -60,7 +58,7 @@ class TaskCard extends StatelessWidget {
                   Flex(
                     direction: Axis.horizontal,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text("20Kb/$fileSize"), Text("${progress * 100}%")],
+                    children: [Text("$fileSize"), Text("${(progress * 100).toStringAsFixed(1)}%")],
                   )
                 ],
               ))

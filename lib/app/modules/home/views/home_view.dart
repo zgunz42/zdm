@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:zdm/app/views/widgets/atomic/molecules/empty_state.dart';
+import 'package:zdm/config/constants/assets.gen.dart';
+import 'package:zdm/models/download_model.dart';
 import 'package:zdm/services/downloader_service.dart';
 import 'package:zdm/app/routes/app_pages.dart';
 import 'package:zdm/app/views/widgets/atomic/molecules/task_card.dart';
@@ -28,7 +31,7 @@ class HomeView extends GetView<HomeController> {
             SliverToBoxAdapter(child: SizedBox(height: 80)),
             SliverToBoxAdapter(
               child: SizedBox(
-                  height: 120,
+                  height: 170,
                   width: MediaQuery.of(context).size.width,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -43,48 +46,62 @@ class HomeView extends GetView<HomeController> {
                               blurRadius: 1)
                         ]),
                     child: Container(
-                      // constraints: BoxConstraints.expand(height: 40),
-                      height: 40,
-                      margin: EdgeInsets.only(bottom: 12),
-                      child: Row(
+                      constraints: BoxConstraints.expand(),
+                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: GetBuilder(
-                                init: controller,
-                                builder: (_) => TextField(
-                                    controller: controller.inputController,
-                                    onSubmitted: (s) => controller
-                                        .rootController.link.value = s,
-                                    autocorrect: false,
-                                    maxLines: 1,
-                                    expands: false,
-                                    showCursor: false,
-                                    minLines: 1,
-                                    maxLengthEnforcement:
-                                        MaxLengthEnforcement.enforced,
-                                    autofocus: false,
-                                    textAlignVertical: TextAlignVertical.top,
-                                    decoration: InputDecoration(
-                                      hintText: "http",
-                                      contentPadding: EdgeInsets.all(4),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.grey, width: 2)),
-                                    )),
-                              ),
+                          Assets.images.appImages.splashLogo.image( width: 100, height: 50),
+                          SizedBox(height: 4,),
+                          Container(
+                            child: Text("by @adi_gunawan"),
+                          ),
+                          Expanded(flex: 1, child: SizedBox.expand(),),
+                          Container(
+                            height: 40,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    child: GetBuilder(
+                                      init: controller,
+                                      builder: (_) => TextField(
+                                          controller: controller.inputController,
+                                          onSubmitted: (s) => controller
+                                              .rootController.link.value = s,
+                                          autocorrect: false,
+                                          maxLines: 1,
+                                          expands: false,
+                                          showCursor: false,
+                                          minLines: 1,
+                                          maxLengthEnforcement:
+                                              MaxLengthEnforcement.enforced,
+                                          autofocus: false,
+                                          textAlignVertical: TextAlignVertical.top,
+                                          decoration: InputDecoration(
+                                            hintText: "https://zippylink",
+                                            contentPadding: EdgeInsets.all(4),
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey, width: 2)),
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      DownloaderService.to
+                                          .download(controller.inputController.text);
+                                    },
+                                    style: Theme.of(context).elevatedButtonTheme.style?.copyWith(backgroundColor: MaterialStateProperty.all(ColorName.crimsonRed)),
+                                    child: Text("Download"))
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                DownloaderService.to
-                                    .download(controller.inputController.text);
-                              },
-                              child: Text("download"))
                         ],
                       ),
                     ),
@@ -112,23 +129,37 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ),
-
-            SliverList(
-                delegate: SliverChildBuilderDelegate((xtx, index) {
-                  final e = DownloaderService.to.tasks["$index"]; 
-                  if(e != null) {
-                    return Obx(() => Container(
+            StreamBuilder(
+              stream: DownloaderService.to.tasks.stream,
+              builder: (context, snapshot) {
+                if(snapshot.hasData && snapshot.hasData) {
+                  List<Download> data = snapshot.data as List<Download>;
+                  return SliverList(
+                  delegate: SliverChildBuilderDelegate((xtx, index) {
+                    final e = data[index]; 
+                    return Container(
                           margin: EdgeInsets.only(bottom: 12),
                           child: TaskCard(
                               title: e.name, 
                               beginDate: e.timeCreated,
                               progress: e.progress/100,
+                              transferRate: e.transferRate,
                               image: DownloaderService.to.getImageFile(e.type),
                               fileSize: e.size,
                             )
-                          ));
-                  }
-                })
+                          );
+                    }, childCount: data.length)
+                  );
+                } else {
+                  return SliverToBoxAdapter(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 300,
+                      child: EmptyState(message: "Task Kosong"),
+                    ),
+                  );
+                } 
+              }
             )
           ]),
       floatingActionButton: FloatingActionButton(
@@ -139,7 +170,7 @@ class HomeView extends GetView<HomeController> {
           Icons.qr_code,
           color: Colors.white,
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: ColorName.crimsonRed,
       ),
     );
   }

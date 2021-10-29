@@ -13,6 +13,8 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   $AssetsImagesAppImagesGen get appImages => const $AssetsImagesAppImagesGen();
+  $AssetsImagesEmptyStateGen get emptyState =>
+      const $AssetsImagesEmptyStateGen();
   $AssetsImagesIconsGen get icons => const $AssetsImagesIconsGen();
 }
 
@@ -23,6 +25,13 @@ class $AssetsImagesAppImagesGen {
       const AssetGenImage('assets/images/app_images/launcher_icon.png');
   AssetGenImage get splashLogo =>
       const AssetGenImage('assets/images/app_images/splash_logo.png');
+}
+
+class $AssetsImagesEmptyStateGen {
+  const $AssetsImagesEmptyStateGen();
+
+  AssetGenImage get file =>
+      const AssetGenImage('assets/images/empty_state/file.png');
 }
 
 class $AssetsImagesIconsGen {
