@@ -25,7 +25,7 @@ dependencies:
   sizer: ^2.0.15
   shared_preferences: ^2.0.6
   path_provider: ^2.0.5
-  device_preview: ^0.7.4
+  device_preview: ^0.8.0
   flutter_keyboard_aware_dialog: ^1.0.1
   google_fonts: ^2.1.0
   #!! UI ===================
