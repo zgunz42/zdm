@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:loading_skeleton/loading_skeleton.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
@@ -18,6 +21,7 @@ import 'package:zdm/datasources/download_datasource.dart';
 import 'package:zdm/models/download_model.dart';
 
 class DownloaderService extends GetxService {
+  GlobalKey<NavigatorState>? navigatorKey = GlobalKey();
   static DownloaderService get to => Get.find();
   final ScrapPage zippy;
   final DownloadDataSource storage;
@@ -34,9 +38,9 @@ class DownloaderService extends GetxService {
   void onInit() {
     super.onInit();
     _bindBackgroundIsolate();
+    FlutterDownloader.registerCallback(downloadCallback);
   }
 
-  
   void _bindBackgroundIsolate() {
     bool isSuccess = IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
@@ -57,7 +61,7 @@ class DownloaderService extends GetxService {
         task.progress = progress ?? 0;
         tasks.refresh();
       } catch (e) {
-        if(e == StateError) {
+        if (e == StateError) {
           print("unfounded data: $e");
         } else {
           throw e;
@@ -107,8 +111,7 @@ class DownloaderService extends GetxService {
   Future<bool> _checkPermission() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    if (GetPlatform.isAndroid &&
-        androidInfo.version.sdkInt <= 28) {
+    if (GetPlatform.isAndroid && androidInfo.version.sdkInt <= 28) {
       final status = await Permission.storage.status;
       if (status != PermissionStatus.granted) {
         final result = await Permission.storage.request();
@@ -124,11 +127,9 @@ class DownloaderService extends GetxService {
     return false;
   }
 
-
   @override
-  void onReady() {
-    loadTaskData();
-    FlutterDownloader.registerCallback(downloadCallback);
+  void onReady() async {
+    await loadTaskData();
   }
 
   @override
@@ -138,52 +139,93 @@ class DownloaderService extends GetxService {
     super.onClose();
   }
 
+  void resumeAll() {
+    for (var item in tasks) {
+      FlutterDownloader.resume(taskId: item.referenceId);
+    }
+  }
+
   Future<void> loadTaskData() async {
     isLoading.value = true;
     final mTasks = await FlutterDownloader.loadTasks();
     final taskData = await storage.getDownloadsFromDb();
 
     print("task db ${taskData.downloads?.map((e) => [e.id, e.referenceId])}");
-    for (var item in mTasks) {
+    for (var item in mTasks!) {
       print("task dl $item ${item.taskId}");
       final taskDownload = await storage.findByReference(item.taskId);
       print("task match $taskDownload");
-      if(taskDownload != null) {
+      if (taskDownload != null) {
         taskDownload.progress = item.progress;
         taskDownload.status = item.status;
         tasks.add(taskDownload);
       }
-      FlutterDownloader.resume(taskId: item.taskId);
+      // FlutterDownloader.resume(taskId: item.taskId);
     }
   }
 
   Future<String?> _requestDownload(String url, String name) async {
-      print("${localPath.value} => $url");
-      return await FlutterDownloader.enqueue(
-        url: url,
-        savedDir: localPath.value,
-        fileName: name,
-        // show download progress in status bar (for Android)
-        showNotification: true,
-        // click on notification to open downloaded file (for Android)
-        openFileFromNotification: true, 
-      );
+    print("${localPath.value} => $url");
+    return await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: localPath.value,
+      fileName: name,
+      // show download progress in status bar (for Android)
+      showNotification: true,
+      // click on notification to open downloaded file (for Android)
+      openFileFromNotification: true,
+      requiresStorageNotLow: false,
+      saveInPublicStorage: true
+    );
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send?.send([id, status, progress]);
   }
 
   Future<void> download(String link) async {
+    Get.dialog(
+        Container(
+          color: Colors.transparent,
+          child: Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    spreadRadius: 0,
+                    blurRadius: 2,
+                    offset: Offset(0, 0),
+                  )
+                ]),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 24),
+                Text("Reading Link",
+                textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black, fontSize: 14))
+              ],
+            ),
+          ),
+          alignment: Alignment.center,
+        ),
+        barrierDismissible: true,
+        useSafeArea: true);
     final parseResult = await zippy.getLink(link);
     final fileSize = await getFileSize(parseResult.dlLink);
 
     permissionReady.value = await _checkPermission();
     if (permissionReady.value) {
       await _prepareSaveDir();
-      final referenceId = await _requestDownload(parseResult.dlLink, parseResult.filename);
+      final referenceId =
+          await _requestDownload(parseResult.dlLink, parseResult.filename);
       if (referenceId != null) {
         final willDownload = Download(
           id: Uuid().v4(),
@@ -194,19 +236,20 @@ class DownloaderService extends GetxService {
           type: parseResult.extension,
           path: localPath.value,
         );
-        
+
         await storage.insert(willDownload);
         tasks.add(willDownload);
       } else {
         Get.log("reference id not valid");
       }
+      Get.back();
     }
   }
 
   Future<String> getFileSize(String link) async {
     var r = await Dio().head(link);
     final sizeHeader = r.headers.value("content-length");
-    final fileSize = int.parse(sizeHeader!);    
+    final fileSize = int.parse(sizeHeader!);
 
     return DownloadUtils.getSizeStr(fileSize);
   }

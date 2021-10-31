@@ -123,7 +123,9 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.more_horiz))
+                          onPressed: () {
+                            DownloaderService.to.resumeAll();
+                          }, icon: const Icon(Icons.more_horiz))
                     ],
                   ),
                 ),

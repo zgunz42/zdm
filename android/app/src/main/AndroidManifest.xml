@@ -60,5 +60,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <meta-data
+            android:name="vn.hunghd.flutterdownloader.NOTIFICATION_ICON"
+            android:value="@mipmap/ic_launcher"
+        />
     </application>
 </manifest>

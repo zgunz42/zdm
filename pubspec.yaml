@@ -48,7 +48,10 @@ dependencies:
   sembast: ^3.1.0+2  ## local nosql DB
   pretty_dio_logger: ^1.1.1
   qr_code_scanner: ^0.5.2
-  flutter_downloader: 1.5.1
+  flutter_downloader: 
+    git:
+      url: https://github.com/zgunz42/flutter_downloader.git
+      ref: 7a31c3a09cf0634c9502a57c2bda0e455004e04f
   timeago: ^3.1.0
   flutter_svg: ^0.23.0+1
   permission_handler: ^8.2.5
