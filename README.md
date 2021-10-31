@@ -1,4 +1,4 @@
-# ZDM
+# ZDM (Zap Download Manager)
 Download Manager For Android and IOS
 
 ### Generate Language
