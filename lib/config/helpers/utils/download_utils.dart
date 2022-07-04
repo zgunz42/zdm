@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'string_utils.dart';
 
@@ -59,7 +60,7 @@ class DownloadUtils {
           // toInt(res);
           return res + "p";
         } catch (e) {
-          print(e);
+          debugPrint(e.toString());
         }
       }
     }

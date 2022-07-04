@@ -20,7 +20,7 @@ class ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<ScannerPage> {
   Barcode? result;
   QRViewController? controller;
-  bool isFoundText = false; 
+  bool isFoundText = false;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -43,82 +43,85 @@ class _ScannerPageState extends State<ScannerPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-        children: <Widget>[
-          _buildQrView(context),
-          Positioned(
-            bottom: 16,
-            left: 0,
-            right: 0,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  // if (result != null)
-                  //   Text(
-                  //       'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  // else
-                  //   Text('Scan a code'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
+      children: <Widget>[
+        _buildQrView(context),
+        Positioned(
+          bottom: 16,
+          left: 0,
+          right: 0,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                // if (result != null)
+                //   Text(
+                //       'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                // else
+                //   Text('Scan a code'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle
-                        ),
-                        child: IconButton(
-                            
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
+                          shape: BoxShape.circle),
+                      child: IconButton(
+                          onPressed: () async {
+                            await controller?.toggleFlash();
+                            setState(() {});
+                          },
+                          icon: FutureBuilder(
+                            future: controller?.getFlashStatus(),
+                            builder: (context, snapshot) {
+                              if (snapshot.data == true) {
+                                return Icon(
+                                  Icons.lightbulb,
+                                  color: Colors.white,
+                                );
+                              }
+                              return Icon(Icons.lightbulb_outline,
+                                  color: Colors.white);
                             },
-                            icon: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                if(snapshot.data == true) {
-                                  return Icon(Icons.lightbulb, color: Colors.white,);
-                                }
-                                return Icon(Icons.lightbulb_outline, color: Colors.white);
-                              },
-                            )),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
+                          )),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle
-                        ),
-                        child: IconButton(
-                            onPressed: () async {
-                              await controller?.flipCamera();
-                              setState(() {});
-                            },
-                            icon: FutureBuilder(
-                              future: controller?.getCameraInfo(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null) {
-                                  if(snapshot.data == "back") {
-                                    return Icon(Icons.cameraswitch, color: Colors.white);
-                                  }
-                                  if(snapshot.data == "front") {
-                                    return Icon(Icons.cameraswitch_outlined, color: Colors.white);
-                                  }
-                                  return Icon(Icons.camera, color: Colors.white);
+                          shape: BoxShape.circle),
+                      child: IconButton(
+                          onPressed: () async {
+                            await controller?.flipCamera();
+                            setState(() {});
+                          },
+                          icon: FutureBuilder(
+                            future: controller?.getCameraInfo(),
+                            builder: (context, snapshot) {
+                              if (snapshot.data != null) {
+                                if (snapshot.data == 'back') {
+                                  return Icon(Icons.cameraswitch,
+                                      color: Colors.white);
                                 }
-                                return Icon(Icons.refresh, color: Colors.white);
-                              },
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                                if (snapshot.data == 'front') {
+                                  return Icon(Icons.cameraswitch_outlined,
+                                      color: Colors.white);
+                                }
+                                return Icon(Icons.camera, color: Colors.white);
+                              }
+                              return Icon(Icons.refresh, color: Colors.white);
+                            },
+                          )),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          )
-        ],
+          ),
+        )
+      ],
     );
   }
 
@@ -148,16 +151,16 @@ class _ScannerPageState extends State<ScannerPage> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      if(isFoundText == false) {
-        print(scanData.format.formatName);
-        print(scanData.code);
-        Get.showSnackbar(GetBar(
-          title: "Scan Status",
-          message: "Successfuly scanned",
+      if (isFoundText == false) {
+        debugPrint(scanData.format.formatName);
+        debugPrint(scanData.code);
+        Get.showSnackbar<void>(GetBar(
+          title: 'Scan Status',
+          message: 'Successfuly scanned',
           backgroundColor: Colors.lightGreen[400]!,
-          icon: Icon(Icons.check_circle),
+          icon: const Icon(Icons.check_circle),
           snackPosition: SnackPosition.TOP,
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
         ))?.then((value) => widget.onFound(scanData.code));
         setState(() {
           result = scanData;
@@ -171,7 +174,7 @@ class _ScannerPageState extends State<ScannerPage> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text('no Permission')),
       );
     }
   }
@@ -179,7 +182,8 @@ class _ScannerPageState extends State<ScannerPage> {
   @override
   void dispose() {
     controller?.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     super.dispose();
   }
 }

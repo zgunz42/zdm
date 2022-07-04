@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:optimized_cached_image/optimized_cached_image.dart';
 import 'package:sembast/sembast.dart';
 import 'package:zdm/config/constants/app_constants.dart';
 import 'package:zdm/models/download_list_model.dart';
@@ -8,14 +10,15 @@ class DownloadDataSource {
   final Database _db;
   DownloadDataSource(this._db);
 
-    // DB functions:--------------------------------------------------------------
+  // DB functions:--------------------------------------------------------------
   Future<int> insert(Download download) async {
     return await _downloadsStore.add(_db, download.toMap());
   }
 
   Future<Download?> findByReference(String id) async {
-    final recordSnapshot = await _downloadsStore.findFirst(_db, finder: Finder(filter: Filter.equals("referenceId", id)));
-    if(recordSnapshot != null) {
+    final recordSnapshot = await _downloadsStore.findFirst(_db,
+        finder: Finder(filter: Filter.equals("referenceId", id)));
+    if (recordSnapshot != null) {
       return Download.fromMap(recordSnapshot.value);
     }
   }
@@ -37,20 +40,19 @@ class DownloadDataSource {
 
     // Making a List<Download> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      Map<String, dynamic> data = {...snapshot.value};
+      final data = {...snapshot.value};
       // An ID is a key of a record from the database.
-      data.putIfAbsent("id", () => snapshot.key);
+      data.putIfAbsent('id', () => snapshot.key);
       final download = Download.fromMap(data);
       return download;
     }).toList();
   }
 
-  Future<DownloadList> getDownloadsFromDb() async {
-
-    print('Loading from database');
+  Future<DownloadList?> getDownloadsFromDb() async {
+    debugPrint('Loading from database');
 
     // download list
-    var downloadsList;
+    DownloadList? downloadsList;
 
     // fetching data
     final recordSnapshots = await _downloadsStore.find(
@@ -58,15 +60,15 @@ class DownloadDataSource {
     );
 
     // Making a List<Download> out of List<RecordSnapshot>
-    if(recordSnapshots.length > 0) {
+    if (recordSnapshots.isNotEmpty) {
       downloadsList = DownloadList(
           downloads: recordSnapshots.map((snapshot) {
-            Map<String, dynamic> data = {...snapshot.value};
-            // An ID is a key of a record from the database.
-            data.putIfAbsent("id", () => snapshot.key);
-            final download = Download.fromMap(data);
-            return download;
-          }).toList());
+        final data = {...snapshot.value};
+        // An ID is a key of a record from the database.
+        data.putIfAbsent('id', () => snapshot.key);
+        final download = Download.fromMap(data);
+        return download;
+      }).toList());
     }
 
     return downloadsList;
@@ -96,6 +98,4 @@ class DownloadDataSource {
       _db,
     );
   }
-
-
 }

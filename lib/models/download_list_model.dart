@@ -1,15 +1,15 @@
-import 'download_model.dart';
+import 'package:zdm/models/download_model.dart';
 
 class DownloadList {
-  final List<Download>? downloads;
-
   DownloadList({
     this.downloads,
   });
 
-  factory DownloadList.fromJson(List<dynamic> json) {
-    List<Download> downloads = <Download>[];
-    downloads = json.map((download) => Download.fromMap(download)).toList();
+  final List<Download>? downloads;
+
+  factory DownloadList.fromJson(List<Map<String, dynamic>> json) {
+    final downloads =
+        json.map<Download>((download) => Download.fromMap(download)).toList();
 
     return DownloadList(
       downloads: downloads,

@@ -21,84 +21,96 @@ class HomeView extends GetView<HomeController> {
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: Text('Beranda'),
+        title: const Text('Beranda'),
         backgroundColor: ColorName.crimsonRed[800],
         centerTitle: true,
       ),
       body: CustomScrollView(
           // height: .height,
           slivers: [
-            SliverToBoxAdapter(child: SizedBox(height: 80)),
+            const SliverToBoxAdapter(child: SizedBox(height: 80)),
             SliverToBoxAdapter(
               child: SizedBox(
                   height: 170,
                   width: MediaQuery.of(context).size.width,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
                     alignment: Alignment.bottomCenter,
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(4)),
                         boxShadow: [
                           BoxShadow(
                               color: Theme.of(context).shadowColor,
                               blurRadius: 1)
                         ]),
                     child: Container(
-                      constraints: BoxConstraints.expand(),
-                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      constraints: const BoxConstraints.expand(),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Assets.images.appImages.splashLogo.image( width: 100, height: 50),
-                          SizedBox(height: 4,),
-                          Container(
-                            child: Text("by @adi_gunawan"),
+                          Assets.images.appImages.splashLogo
+                              .image(width: 100, height: 50),
+                          const SizedBox(
+                            height: 4,
                           ),
-                          Expanded(flex: 1, child: SizedBox.expand(),),
-                          Container(
+                          const Text('by @adi_gunawan'),
+                          const Expanded(
+                            child: SizedBox.expand(),
+                          ),
+                          SizedBox(
                             height: 40,
                             child: Row(
                               children: [
                                 Expanded(
                                   flex: 1,
-                                  child: Container(
-                                    child: GetBuilder(
-                                      init: controller,
-                                      builder: (_) => TextField(
-                                          controller: controller.inputController,
-                                          onSubmitted: (s) => controller
-                                              .rootController.link.value = s,
-                                          autocorrect: false,
-                                          maxLines: 1,
-                                          expands: false,
-                                          showCursor: false,
-                                          minLines: 1,
-                                          maxLengthEnforcement:
-                                              MaxLengthEnforcement.enforced,
-                                          autofocus: false,
-                                          textAlignVertical: TextAlignVertical.top,
-                                          decoration: InputDecoration(
-                                            hintText: "https://zippylink",
-                                            contentPadding: EdgeInsets.all(4),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey, width: 2)),
-                                          )),
-                                    ),
+                                  child: GetBuilder(
+                                    init: controller,
+                                    builder: (_) => TextField(
+                                        controller: controller.inputController,
+                                        onSubmitted: (s) => controller
+                                            .rootController.link.value = s,
+                                        autocorrect: false,
+                                        maxLines: 1,
+                                        expands: false,
+                                        showCursor: false,
+                                        minLines: 1,
+                                        maxLengthEnforcement:
+                                            MaxLengthEnforcement.enforced,
+                                        textAlignVertical:
+                                            TextAlignVertical.top,
+                                        decoration: const InputDecoration(
+                                          hintText: 'https://zippylink',
+                                          contentPadding: EdgeInsets.all(4),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.grey,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        )),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 12,
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      DownloaderService.to
-                                          .download(controller.inputController.text);
+                                      DownloaderService.to.download(
+                                          controller.inputController.text);
                                     },
-                                    style: Theme.of(context).elevatedButtonTheme.style?.copyWith(backgroundColor: MaterialStateProperty.all(ColorName.crimsonRed)),
-                                    child: Text("Download"))
+                                    style: Theme.of(context)
+                                        .elevatedButtonTheme
+                                        .style
+                                        ?.copyWith(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    ColorName.crimsonRed)),
+                                    child: Text('Download'))
                               ],
                             ),
                           ),
@@ -118,61 +130,59 @@ class HomeView extends GetView<HomeController> {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          "Download List",
+                          'Download List',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                       IconButton(
                           onPressed: () {
                             DownloaderService.to.resumeAll();
-                          }, icon: const Icon(Icons.more_horiz))
+                          },
+                          icon: const Icon(Icons.more_horiz))
                     ],
                   ),
                 ),
               ),
             ),
             StreamBuilder(
-              stream: DownloaderService.to.tasks.stream,
-              builder: (context, snapshot) {
-                if(snapshot.hasData && snapshot.hasData) {
-                  List<Download> data = snapshot.data as List<Download>;
-                  return SliverList(
-                  delegate: SliverChildBuilderDelegate((xtx, index) {
-                    final e = data[index]; 
-                    return Container(
+                stream: DownloaderService.to.tasks.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.hasData) {
+                    List<Download> data = snapshot.data as List<Download>;
+                    return SliverList(
+                        delegate: SliverChildBuilderDelegate((xtx, index) {
+                      final e = data[index];
+                      return Container(
                           margin: EdgeInsets.only(bottom: 12),
                           child: TaskCard(
-                              title: e.name, 
-                              beginDate: e.timeCreated,
-                              progress: e.progress/100,
-                              transferRate: e.transferRate,
-                              image: DownloaderService.to.getImageFile(e.type),
-                              fileSize: e.size,
-                            )
-                          );
-                    }, childCount: data.length)
-                  );
-                } else {
-                  return SliverToBoxAdapter(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 300,
-                      child: EmptyState(message: "Task Kosong"),
-                    ),
-                  );
-                } 
-              }
-            )
+                            title: e.name,
+                            beginDate: e.timeCreated,
+                            progress: e.progress / 100,
+                            transferRate: e.transferRate,
+                            image: DownloaderService.to.getImageFile(e.type),
+                            fileSize: e.size,
+                          ));
+                    }, childCount: data.length));
+                  } else {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 300,
+                        child: EmptyState(message: 'Task Kosong'),
+                      ),
+                    );
+                  }
+                })
           ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.toNamed(Routes.SCANNER);
+          Get.toNamed<void>(Routes.SCANNER);
         },
+        backgroundColor: ColorName.crimsonRed,
         child: const Icon(
           Icons.qr_code,
           color: Colors.white,
         ),
-        backgroundColor: ColorName.crimsonRed,
       ),
     );
   }

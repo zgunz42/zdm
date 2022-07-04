@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:zdm/config/constants/app_constants.dart';
-import 'package:zdm/config/helpers/utils/encyption/xxtea.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zdm/config/constants/app_constants.dart';
+import 'package:zdm/config/helpers/utils/encyption/xxtea.dart';
 
- class LocalProvider {
+class LocalProvider {
   /// A singleton preference provider.
   ///
   /// Calling it multiple times will return the same instance.
@@ -31,10 +31,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
     // Check to see if encryption is set, then provide codec
     // else init normal db with path
-    var database;
+    Database database;
     if (encryptionKey.isNotEmpty) {
       // Initialize the encryption codec with a user password
-      var codec = getXXTeaCodec(password: encryptionKey);
+      final codec = getXXTeaCodec(password: encryptionKey);
       database = await databaseFactoryIo.openDatabase(dbPath, codec: codec);
     } else {
       database = await databaseFactoryIo.openDatabase(dbPath);

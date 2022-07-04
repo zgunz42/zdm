@@ -36,7 +36,7 @@ class ZDMApp extends StatelessWidget {
                 enableLog: true,
                 logWriterCallback: Logger.write,
                 title: APP_NAME,
-                unknownRoute: GetPage(
+                unknownRoute: GetPage<void>(
                     name: Routes.NOTFOUND, page: () => UnknownRouteScreen()),
                 initialRoute: AppPages.INITIAL,
                 getPages: AppPages.routes,

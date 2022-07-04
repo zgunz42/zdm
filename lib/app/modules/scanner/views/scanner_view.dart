@@ -11,11 +11,13 @@ class ScannerView extends GetView<ScannerController> {
   Widget build(BuildContext context) {
     RootController rootController = Get.find();
     return Scaffold(
-      body: ScannerPage(onFound: (text) {
-        Get.log(rootController.link.value);
-        rootController.link.value = text;
-        Get.back();
-      },),
+      body: ScannerPage(
+        onFound: (text) {
+          Get.log(rootController.link.value);
+          rootController.link.value = text;
+          Get.back<void>();
+        },
+      ),
     );
   }
 }

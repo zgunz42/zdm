@@ -1,6 +1,5 @@
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp
@@ -72,3 +71,6 @@ build/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 .flutter-plugins-dependencies
 ios/Flutter/flutter_export_environment.sh
+
+# FVM
+.fvm/flutter_sdk

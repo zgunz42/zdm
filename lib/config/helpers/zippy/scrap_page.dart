@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import './parse_page.dart';
 
 abstract class HttpClient {
@@ -14,10 +15,9 @@ class DioClient extends HttpClient {
 
   @override
   FutureOr<String> getBody(String url) async {
-    var response = await dio.get(url);
-    return response.data;
+    final response = await dio.get<String>(url);
+    return response.data ?? '';
   }
-
 }
 
 class ScrapPage {
@@ -25,24 +25,24 @@ class ScrapPage {
 
   ScrapPage(this.client);
 
-  getHtmlContent(String url) async {
+  FutureOr<String> getHtmlContent(String url) async {
     try {
       var response = await this.client.getBody(url);
       return response;
     } catch (e) {
-      print(e);
-      throw e;
+      debugPrint(e.toString());
+      rethrow;
     }
   }
 
-   Future<ParsePage> getLink(url) async {
+  Future<ParsePage> getLink(String url) async {
     try {
-      return ParsePage.findLink(await this.getHtmlContent(url));
+      return ParsePage.findLink(await getHtmlContent(url));
     } catch (e) {
-      if(e.runtimeType == ArgumentError) {
-        print(e);
+      if (e.runtimeType == ArgumentError) {
+        debugPrint(e.toString());
       }
-      throw e;
+      rethrow;
     }
   }
 }

@@ -20,7 +20,8 @@ class _XXTeaDecoder extends Converter<String, Map<String, dynamic>> {
 
   @override
   Map<String, dynamic> convert(String input) {
-    var result = json.decode(xxtea.decryptToString(input, key)!);
+    final result =
+        json.decode(xxtea.decryptToString(input, key)!) as Map<String, dynamic>;
     if (result is Map) {
       return result.cast<String, dynamic>();
     }
@@ -35,6 +36,7 @@ class _XXTeaCodec extends Codec<Map<String, dynamic>, String> {
   late _XXTeaDecoder _decoder;
 
   /// A non null [password] to use for the encryption/decryption
+  // ignore: sort_constructors_first
   _XXTeaCodec(String password) {
     _encoder = _XXTeaEncoder(password);
     _decoder = _XXTeaDecoder(password);

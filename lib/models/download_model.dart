@@ -3,6 +3,22 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:sembast/timestamp.dart';
 
 class Download {
+  Download({
+    required this.id,
+    required this.name,
+    required this.size,
+    required this.timeCreated,
+    required this.type,
+    required this.path,
+    String? referenceId,
+    String? transferRate,
+    DownloadTaskStatus? status,
+    int? progress,
+  })  : progress = progress ?? 0,
+        status = status ?? DownloadTaskStatus.undefined,
+        transferRate = transferRate ?? '',
+        referenceId = referenceId ?? '';
+
   final String id;
   final String name;
   final String size;
@@ -15,42 +31,29 @@ class Download {
   late DownloadTaskStatus status;
   late String transferRate;
 
-  Download({
-    required this.id,
-    required this.name,
-    required this.size,
-    required this.timeCreated,
-    required this.type,
-    required this.path,
-    String? referenceId,
-    String? transferRate,
-    DownloadTaskStatus? status,
-    int? progress,
-  }): progress = progress ?? 0, status = status ?? DownloadTaskStatus.undefined, transferRate = transferRate ?? "", referenceId = referenceId ?? "";
-
   factory Download.fromMap(Map<String, dynamic> json) => Download(
-        id: json["id"],
-        name: json["name"],
-        size: json["size"],
-        timeCreated: (json["timeCreated"] as Timestamp).toDateTime(),
-        path: json["path"],
-        type: json["type"],
-        referenceId: json["referenceId"],
-        transferRate: json["transferRate"],
-        progress: json["progress"],
-        status: DownloadTaskStatus.from(json["status"])
-      );
+      id: json['id'] as String,
+      name: json['name'] as String,
+      size: json['size'] as String,
+      timeCreated: (json['timeCreated'] as Timestamp).toDateTime(),
+      path: json['path'] as String,
+      type: json['type'] as String,
+      referenceId: json['referenceId'] as String?,
+      transferRate: json['transferRate'] as String?,
+      progress: json['progress'] as int?,
+      status: DownloadTaskStatus.from(json['status'] as int));
 
+  // ignore: public_member_api_docs, unnecessary_cast
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
-        "size": size,
-        "timeCreated": Timestamp.fromDateTime(timeCreated),
-        "type": type,
-        "path": path,
-        "referenceId": referenceId,
-        "transferRate": transferRate,
-        "status": status.value,
-        "progress": progress,
-      };
+        'id': id,
+        'name': name,
+        'size': size,
+        'timeCreated': Timestamp.fromDateTime(timeCreated),
+        'type': type,
+        'path': path,
+        'referenceId': referenceId,
+        'transferRate': transferRate,
+        'status': status.value,
+        'progress': progress,
+      } as Map<String, dynamic>;
 }
