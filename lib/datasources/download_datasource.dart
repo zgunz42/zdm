@@ -17,7 +17,7 @@ class DownloadDataSource {
 
   Future<Download?> findByReference(String id) async {
     final recordSnapshot = await _downloadsStore.findFirst(_db,
-        finder: Finder(filter: Filter.equals("referenceId", id)));
+        finder: Finder(filter: Filter.equals('referenceId', id)));
     if (recordSnapshot != null) {
       return Download.fromMap(recordSnapshot.value);
     }

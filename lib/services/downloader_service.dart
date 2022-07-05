@@ -161,8 +161,9 @@ class DownloaderService extends GetxService {
       final taskDownload = await storage.findByReference(item.taskId);
       debugPrint('task match $taskDownload');
       if (taskDownload != null) {
-        taskDownload.progress = item.progress;
-        taskDownload.status = item.status;
+        taskDownload
+          ..progress = item.progress
+          ..status = item.status;
         tasks.add(taskDownload);
       }
       // FlutterDownloader.resume(taskId: item.taskId);
@@ -171,14 +172,11 @@ class DownloaderService extends GetxService {
 
   Future<String?> _requestDownload(String url, String name) async {
     debugPrint('${localPath.value} => $url');
-    return await FlutterDownloader.enqueue(
+    final encodeName = Uri.decodeComponent(name);
+    return FlutterDownloader.enqueue(
         url: url,
         savedDir: localPath.value,
-        fileName: name,
-        // show download progress in status bar (for Android)
-        showNotification: true,
-        // click on notification to open downloaded file (for Android)
-        openFileFromNotification: true,
+        fileName: encodeName,
         requiresStorageNotLow: false,
         saveInPublicStorage: true);
   }

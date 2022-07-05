@@ -3,18 +3,19 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:zdm/config/constants/assets.gen.dart';
 
 class TaskCard extends StatelessWidget {
-  final String title;
-  final DateTime beginDate;
-  final double progress;
-  final String fileSize, transferRate;
-  final SvgGenImage image;
-
   const TaskCard({Key? key, 
   required this.title, 
   required this.beginDate, required this.progress, 
   required this.image,
   required this.transferRate,
   required this.fileSize}) : super(key: key);
+  
+  final String title;
+  final DateTime beginDate;
+  final double progress;
+  final String fileSize, transferRate;
+  final SvgGenImage image;
+
 
   @override
   Widget build(BuildContext context) {

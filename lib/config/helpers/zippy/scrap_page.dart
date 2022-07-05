@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:zdm/error/invalid_content_error.dart';
 import './parse_page.dart';
 
 abstract class HttpClient {
@@ -37,9 +38,11 @@ class ScrapPage {
 
   Future<ParsePage> getLink(String url) async {
     try {
+      debugPrint(url);
       return ParsePage.findLink(await getHtmlContent(url));
     } catch (e) {
-      if (e.runtimeType == ArgumentError) {
+      debugPrint(e.toString());
+      if (e.runtimeType == InvalidContentError) {
         debugPrint(e.toString());
       }
       rethrow;

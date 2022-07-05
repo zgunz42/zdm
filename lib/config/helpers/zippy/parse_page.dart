@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:petitparser/petitparser.dart';
+import 'package:zdm/error/invalid_content_error.dart';
 
 class ParsePage {
   /// Returns a [ParsePage] instance for the given [endpoint] and [fileId].
@@ -74,8 +75,9 @@ class ParsePage {
   /// Returns the [endpoint] of the page.
   static List<String> _url(String html) {
     final urlExp = RegExp(
-        r'(?<=<meta property="og:url" content=")(\/\/w{3}\d{2}.zippyshare\.com)\/\w\/(.*)\/.*(?="\s?\/>)',
-        multiLine: true);
+      r'(?<=<meta property="og:url" content=")(\/\/w{3}\d{2}.zippyshare\.com)\/\w\/(.*)\/.*(?="\s?\/>)',
+      multiLine: true,
+    );
     try {
       final paths = urlExp.allMatches(html).elementAt(0).groups([1, 2]);
 
@@ -87,8 +89,8 @@ class ParsePage {
       }
     } catch (e) {
       if (e is IndexError) {
-        throw ArgumentError(
-            "endpoint and fileId could't be found", 'invalid html');
+        throw InvalidContentError(
+            "endpoint and fileId could't be found invalid html");
       } else {
         rethrow;
       }
@@ -101,7 +103,7 @@ class ParsePage {
   }
 
   String get filename {
-    return _fileName;
+    return Uri.decodeComponent(_fileName);
   }
 
   String get extension {
