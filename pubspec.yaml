@@ -53,7 +53,7 @@ dependencies:
       url: https://github.com/zgunz42/flutter_downloader.git
       ref: 7a31c3a09cf0634c9502a57c2bda0e455004e04f
   timeago: ^3.1.0
-  flutter_svg: ^0.23.0+1
+  flutter_svg: ^1.0.0
   permission_handler: ^8.2.5
   device_info: ^2.0.2
   android_path_provider: ^0.3.0
