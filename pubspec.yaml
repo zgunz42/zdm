@@ -62,7 +62,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  analyzer: ^2.7.0
+  analyzer: ^5.0.0
   mockito: ^5.0.16
   flutter_launcher_icons: ^0.9.2
   flutter_native_splash: ^1.2.4
