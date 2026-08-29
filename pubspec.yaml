@@ -33,7 +33,7 @@ dependencies:
   unicons: ^2.0.2
   cupertino_icons: ^1.0.3
   # ======= Widget ==========
-  another_flushbar: ^1.10.23
+  another_flushbar: ^2.0.0
   material_dialog: ^1.0.0-nullsafety.1
   #!! UTILS ===================
   optimized_cached_image: ^3.0.0
